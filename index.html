@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BM Shop – Clothing & Electronics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14213d; --paper:#f2f5f9; --card:#ffffff; --accent:#ffb703; --accent-ink:#3a2a00;
+  --muted:#5b667a; --line:#dde3ec; --ok:#1f8a5b;
+  --head:"Bricolage Grotesque","Hind Siliguri",system-ui,sans-serif;
+  --body:"Hind Siliguri",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#eef2fa; --paper:#0f1626; --card:#18223a; --accent:#ffb703; --accent-ink:#3a2a00; --muted:#9aa6bd; --line:#2a3656; --ok:#4cc38a}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+header{position:sticky;top:0;z-index:5;background:var(--ink);color:var(--paper)}
+@media (prefers-color-scheme:dark){header{background:#0a101d;color:#eef2fa}}
+.bar{display:flex;align-items:center;gap:16px;height:64px}
+.logo{font-family:var(--head);font-weight:800;font-size:1.5rem;letter-spacing:-.02em;margin-right:auto}
+.logo b{background:var(--accent);color:var(--accent-ink);padding:0 8px;border-radius:6px;margin-right:6px}
+.cartbtn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:8px 18px;font-weight:600;cursor:pointer}
+
+.hero{padding:44px 0 28px}
+.hero h1{font-family:var(--head);font-weight:800;font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 12px;max-width:14ch}
+.hero p{color:var(--muted);margin:0 0 20px;max-width:46ch}
+.tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.search{flex:1 1 240px;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:500}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px;padding:12px 0 56px}
+.p{background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+.pic{aspect-ratio:1/1;display:grid;place-items:center;font-size:4.5rem}
+.info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.cat{color:var(--muted);font-size:.85rem}
+.name{font-family:var(--head);font-weight:700;font-size:1.1rem;line-height:1.25;margin:0}
+.price{font-weight:600;font-size:1.15rem;margin-top:auto}
+.add{margin-top:8px;border:0;border-radius:10px;background:var(--ink);color:var(--paper);padding:10px;font-weight:600;cursor:pointer}
+.add:active{transform:scale(.98)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+aside{position:fixed;inset:0 0 0 auto;width:min(420px,100%);background:var(--card);z-index:10;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,.25)}
+aside.open{transform:none}
+.ch{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.ch h2{font-family:var(--head);margin:0;font-size:1.3rem}
+.x{background:none;border:0;font-size:1.6rem;cursor:pointer;line-height:1}
+.items{flex:1;overflow:auto;padding:8px 20px}
+.row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.row .em{font-size:2rem}
+.row .t{flex:1}
+.row .t small{color:var(--muted)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--paper);cursor:pointer}
+.foot{padding:16px 20px;border-top:1px solid var(--line);display:grid;gap:10px}
+.total{display:flex;justify-content:space-between;font-weight:600;font-size:1.2rem}
+.foot input{border:2px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 12px;width:100%}
+.pay{display:grid;gap:6px}.pay label{display:flex;gap:8px;align-items:center;border:2px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}.pay input{width:auto}
+.payinfo{background:var(--paper);border-radius:10px;padding:10px 12px;font-size:.95rem;display:none}
+.order{border:0;border-radius:12px;background:var(--ok);color:#fff;padding:14px;font-weight:600;font-size:1.05rem;cursor:pointer}
+.order:disabled{opacity:.5;cursor:not-allowed}
+.note{color:var(--muted);font-size:.85rem;margin:0}
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9;display:none}
+.veil.on{display:block}
+
+.banner{margin:16px 0 0;padding:14px 16px;border-radius:12px;font-weight:600}.banner.ok{background:var(--ok);color:#fff}.banner.bad{background:#b3261e;color:#fff}.banner a{color:inherit;text-decoration:underline}
+footer{background:var(--ink);color:var(--paper);padding:28px 0;font-size:.95rem}
+@media (prefers-color-scheme:dark){footer{background:#0a101d}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo"><b>BM</b>Shop</div>
+    <button class="cartbtn" id="openCart" aria-label="Open cart">Cart (<span id="count">0</span>)</button>
+  </div>
+</header>
+
+<div class="wrap"><p id="banner" class="banner" role="status" hidden></p></div>
+<main class="wrap">
+  <section class="hero">
+    <h1>Clothes and gadgets, delivered.</h1>
+    <p>Pick what you like, add to cart, and send your order on WhatsApp. We confirm and deliver.</p>
+    <div class="tools">
+      <input class="search" id="q" type="search" placeholder="Search products" aria-label="Search products">
+      <div class="tabs" id="tabs">
+        <button class="tab" data-c="all" aria-pressed="true">All</button>
+        <button class="tab" data-c="Clothing" aria-pressed="false">Clothing</button>
+        <button class="tab" data-c="Electronics" aria-pressed="false">Electronics</button>
+      </div>
+    </div>
+  </section>
+  <section class="grid" id="grid" aria-live="polite"></section>
+</main>
+
+<footer><div class="wrap">BM Shop · Orders on WhatsApp · Cash on delivery</div></footer>
+
+<div class="veil" id="veil"></div>
+<aside id="cart" aria-label="Your cart">
+  <div class="ch"><h2>Your cart</h2><button class="x" id="closeCart" aria-label="Close cart">×</button></div>
+  <div class="items" id="items"></div>
+  <div class="foot">
+    <div class="total"><span>Total</span><span id="total">৳0</span></div>
+    <input id="cname" placeholder="Your name" autocomplete="name">
+    <input id="cphone" placeholder="Phone (01712345678)" autocomplete="tel" inputmode="tel">
+    <input id="caddr" placeholder="Delivery address" autocomplete="street-address">
+    <div class="pay" id="pay" role="radiogroup" aria-label="Payment method">
+      <label><input type="radio" name="pm" value="Online" checked> Pay online (bKash, Nagad, Card)</label>
+      <label><input type="radio" name="pm" value="Cash on delivery"> Cash on delivery</label>
+      <label><input type="radio" name="pm" value="bKash"> bKash</label>
+      <label><input type="radio" name="pm" value="Nagad"> Nagad</label>
+    </div>
+    <div class="payinfo" id="payinfo"></div>
+    <input id="trx" placeholder="Transaction ID (TrxID)" style="display:none">
+    <button class="order" id="order" disabled>Pay now</button>
+    <p class="note">WhatsApp will open with your order ready to send.</p>
+  </div>
+</aside>
+
+<script>
+/* ====== EDIT THIS PART ====== */
+var WHATSAPP = "8801XXXXXXXXX"; // your number: 880 + number without the first 0
+var BKASH = "01XXXXXXXXX";  // your bKash (personal/merchant) number
+var NAGAD = "01XXXXXXXXX";  // your Nagad number
+var PRODUCTS = [
+  {id:1, n:"Cotton Panjabi", c:"Clothing", p:1200, e:"👘", bg:"#ffd9a8"},
+  {id:2, n:"Men's Polo T-Shirt", c:"Clothing", p:550, e:"👕", bg:"#bfe3f5"},
+  {id:3, n:"Women's Three-Piece", c:"Clothing", p:2400, e:"👗", bg:"#f7c6d9"},
+  {id:4, n:"Denim Jeans", c:"Clothing", p:1500, e:"👖", bg:"#c5cdf2"},
+  {id:5, n:"Wireless Earbuds", c:"Electronics", p:1800, e:"🎧", bg:"#d3f0d0"},
+  {id:6, n:"Smart Watch", c:"Electronics", p:3200, e:"⌚", bg:"#e5d3f7"},
+  {id:7, n:"Power Bank 10000mAh", c:"Electronics", p:1400, e:"🔋", bg:"#fff0a8"},
+  {id:8, n:"Bluetooth Speaker", c:"Electronics", p:2100, e:"🔊", bg:"#ffd0c2"}
+];
+/* ====== END ====== */
+
+var cart = {}, cat = "all", term = "";
+var $ = function(id){return document.getElementById(id)};
+var tk = function(n){return "৳" + n.toLocaleString("en-US")};
+
+function render(){
+  var list = PRODUCTS.filter(function(x){
+    return (cat==="all"||x.c===cat) && x.n.toLowerCase().indexOf(term)>-1;
+  });
+  $("grid").innerHTML = list.length ? list.map(function(x){
+    return '<article class="p"><div class="pic" style="background:'+x.bg+'" aria-hidden="true">'+x.e+'</div>'+
+      '<div class="info"><span class="cat">'+x.c+'</span><h3 class="name">'+x.n+'</h3>'+
+      '<span class="price">'+tk(x.p)+'</span>'+
+      '<button class="add" data-id="'+x.id+'">Add to cart</button></div></article>';
+  }).join("") : '<p class="empty">No products found. Try another word.</p>';
+}
+
+function drawCart(){
+  var ids = Object.keys(cart), sum = 0, n = 0;
+  $("items").innerHTML = ids.length ? ids.map(function(id){
+    var x = PRODUCTS.filter(function(p){return p.id==id})[0], q = cart[id];
+    sum += x.p*q; n += q;
+    return '<div class="row"><span class="em">'+x.e+'</span><div class="t">'+x.n+'<br><small>'+tk(x.p)+'</small></div>'+
+      '<div class="qty"><button data-m="'+id+'" aria-label="Less">−</button><span>'+q+'</span><button data-a="'+id+'" aria-label="More">+</button></div></div>';
+  }).join("") : '<p class="empty">Your cart is empty.</p>';
+  $("count").textContent = n; $("total").textContent = tk(sum);
+  $("order").disabled = !ids.length;
+}
+
+function openCart(on){ $("cart").classList.toggle("open",on); $("veil").classList.toggle("on",on); }
+
+$("grid").addEventListener("click", function(e){
+  var id = e.target.getAttribute("data-id"); if(!id) return;
+  cart[id] = (cart[id]||0)+1; drawCart();
+  e.target.textContent = "Added ✓"; setTimeout(function(){e.target.textContent="Add to cart"},900);
+});
+$("items").addEventListener("click", function(e){
+  var a = e.target.getAttribute("data-a"), m = e.target.getAttribute("data-m");
+  if(a) cart[a]++;
+  if(m){ cart[m]--; if(cart[m]<1) delete cart[m]; }
+  drawCart();
+});
+$("tabs").addEventListener("click", function(e){
+  var c = e.target.getAttribute("data-c"); if(!c) return; cat = c;
+  [].forEach.call(document.querySelectorAll(".tab"), function(t){t.setAttribute("aria-pressed", t.getAttribute("data-c")===c)});
+  render();
+});
+$("q").addEventListener("input", function(e){ term = e.target.value.toLowerCase().trim(); render(); });
+$("openCart").onclick = function(){openCart(true)};
+$("closeCart").onclick = $("veil").onclick = function(){openCart(false)};
+document.addEventListener("keydown", function(e){ if(e.key==="Escape") openCart(false); });
+
+function pm(){return document.querySelector('input[name="pm"]:checked').value}
+$("pay").addEventListener("change", function(){
+  var m = pm(), info = $("payinfo"), t = $("trx");
+  $("order").textContent = m==="Online" ? "Pay now" : "Order on WhatsApp";
+  if(m==="Cash on delivery"||m==="Online"){ info.style.display="none"; t.style.display="none"; }
+  else {
+    var num = m==="bKash"?BKASH:NAGAD;
+    info.style.display="block"; t.style.display="block";
+    info.textContent = "Step 1: Send "+$("total").textContent+" to "+m+" number "+num+" (Send Money). Step 2: Type the TrxID below.";
+  }
+});
+$("order").onclick = function(){
+  var m = pm();
+  if(m==="Online"){
+    var btn = $("order"); btn.disabled = true; btn.textContent = "Opening payment page...";
+    var body = {items:Object.keys(cart).map(function(id){return {id:Number(id),q:cart[id]}}),
+      name:$("cname").value, phone:$("cphone").value, address:$("caddr").value};
+    fetch("/api/pay",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d.url){
+          try{ sessionStorage.setItem("bmOrder", JSON.stringify({lines:lineList(), name:$("cname").value, addr:$("caddr").value, phone:$("cphone").value})); }catch(e){}
+          window.location = d.url;
+        } else { alert(d.error||"Something went wrong"); btn.disabled=false; btn.textContent="Pay now"; }
+      })
+      .catch(function(){ alert("Could not reach the payment server."); btn.disabled=false; btn.textContent="Pay now"; });
+    return;
+  }
+  if(m!=="Cash on delivery" && !$("trx").value.trim()){ alert("Please send the money first, then type the TrxID."); $("trx").focus(); return; }
+  var lines = [], sum = 0;
+  Object.keys(cart).forEach(function(id){
+    var x = PRODUCTS.filter(function(p){return p.id==id})[0];
+    lines.push("• "+x.n+" x"+cart[id]+" = "+tk(x.p*cart[id])); sum += x.p*cart[id];
+  });
+  var msg = "Hello BM Shop, I want to order:\n"+lines.join("\n")+"\nTotal: "+tk(sum)+
+    "\nPayment: "+m+(m!=="Cash on delivery"?" (TrxID: "+$("trx").value.trim()+")":"")+"\nName: "+($("cname").value||"-")+"\nAddress: "+($("caddr").value||"-");
+  window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg), "_blank");
+};
+
+function lineList(){
+  var out=[]; Object.keys(cart).forEach(function(id){
+    var x = PRODUCTS.filter(function(p){return p.id==id})[0];
+    out.push("• "+x.n+" x"+cart[id]+" = "+tk(x.p*cart[id])); });
+  return out;
+}
+(function(){
+  var u = new URLSearchParams(location.search), b = $("banner");
+  if(!u.has("paid")) return;
+  b.hidden = false;
+  if(u.get("paid")==="1"){
+    var o = null; try{ o = JSON.parse(sessionStorage.getItem("bmOrder")||"null"); }catch(e){}
+    var msg = "Hello BM Shop, I paid online.\nPayment ID: "+u.get("tid")+"\nAmount: ৳"+u.get("amt")+
+      (o?"\n"+o.lines.join("\n")+"\nName: "+o.name+"\nPhone: "+o.phone+"\nAddress: "+o.addr:"");
+    b.className = "banner ok";
+    b.innerHTML = 'Payment received. Thank you! Your payment ID is '+u.get("tid")+'. <a target="_blank" rel="noopener" href="https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg)+'">Send order details on WhatsApp</a>';
+    try{ sessionStorage.removeItem("bmOrder"); }catch(e){}
+  } else {
+    b.className = "banner bad"; b.textContent = "Payment was not completed. You were not charged. Please try again.";
+  }
+  history.replaceState(null,"",location.pathname);
+})();
+render(); drawCart();
+</script>
+</body>
+</html>
